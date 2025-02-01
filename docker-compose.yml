@@ -1,0 +1,29 @@
+# Docker Compose file to set up a Django development environment
+
+# The `version` key is no longer needed in newer Docker versions but can be kept for compatibility.
+# It specifies which Docker Compose file format is being used.
+version: "3.8"
+
+services:
+  app:
+    # Specifies the build context; `.` means the Dockerfile is in the current directory.
+    build: .
+    
+    # Mounts the current project directory (host) to `/django` inside the container.
+    # This allows code changes on the host to reflect in the container without rebuilding.
+    volumes:
+      - .:/django
+
+    # Maps port 8000 on the host to port 8000 in the container.
+    # This allows accessing the Django app at `http://localhost:8000`.
+    ports:
+      - 8000:8000
+
+    # Assigns a custom name to the built image.
+    image: app:django
+
+    # Assigns a custom name to the container for easier reference.
+    container_name: django_container
+
+    # Command to run the Django development server, binding to all network interfaces.
+    command: python manage.py runserver 0.0.0.0:8000
