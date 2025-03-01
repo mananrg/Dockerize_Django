@@ -1,9 +1,5 @@
 # Docker Compose file to set up a Django development environment
 
-# The `version` key is no longer needed in newer Docker versions but can be kept for compatibility.
-# It specifies which Docker Compose file format is being used.
-version: "3.8"
-
 services:
   app:
     # Specifies the build context; `.` means the Dockerfile is in the current directory.
@@ -27,3 +23,16 @@ services:
 
     # Command to run the Django development server, binding to all network interfaces.
     command: python manage.py runserver 0.0.0.0:8000
+    depends_on:
+      - db
+  db:
+    image: postgres
+    volumes:
+      - ./data/db:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    container_name: postgres_db
+    ports:
+      - 5432:5432
